@@ -1,28 +1,222 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>JasonZhang&#39;s Blog</title>
-  
-  <link href="/atom.xml" rel="self"/>
-  
-  <link href="http://yoursite.com/"/>
-  <updated>2017-03-14T09:38:51.373Z</updated>
-  <id>http://yoursite.com/</id>
-  
-  <author>
-    <name>JasonZhang</name>
+<!DOCTYPE html>
+<html>
+<head>
     
-  </author>
-  
-  <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>聊一聊Android的消息机制</title>
-    <link href="http://yoursite.com/2017/03/10/Handler/"/>
-    <id>http://yoursite.com/2017/03/10/Handler/</id>
-    <published>2017-03-10T09:37:59.736Z</published>
-    <updated>2017-03-14T09:38:51.373Z</updated>
+
     
-    <content type="html"><![CDATA[<h5 id="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"><a href="#一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。" class="headerlink" title="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"></a>一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。</h5><p>今天我们主要来聊一聊进程内部的消息机制<strong>Handler</strong>。</p>
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>聊一聊Android的消息机制 | JasonZhang&#39;s Blog | null</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。今天我们主要来聊一聊进程内部的消息机制Handler。
+从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：
+
+消息发送者
+消息队列
+消息循环处理
+
+简单示意图如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊一聊Android的消息机制">
+<meta property="og:url" content="http://yoursite.com/2017/03/10/Handler/index.html">
+<meta property="og:site_name" content="JasonZhang's Blog">
+<meta property="og:description" content="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。今天我们主要来聊一聊进程内部的消息机制Handler。
+从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：
+
+消息发送者
+消息队列
+消息循环处理
+
+简单示意图如下：">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/android/handler/xiaoxi01.png">
+<meta property="og:updated_time" content="2017-03-14T09:38:51.373Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊一聊Android的消息机制">
+<meta name="twitter:description" content="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。今天我们主要来聊一聊进程内部的消息机制Handler。
+从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：
+
+消息发送者
+消息队列
+消息循环处理
+
+简单示意图如下：">
+<meta name="twitter:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/android/handler/xiaoxi01.png">
+    
+        <link rel="alternative" href="/atom.xml" title="JasonZhang&#39;s Blog" type="application/atom+xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.9">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JasonZhang</h5>
+          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/ysweb" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">聊一聊Android的消息机制</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">聊一聊Android的消息机制</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-10T09:37:59.736Z" itemprop="datePublished" class="page-time">
+  2017-03-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"><span class="post-toc-number">1.</span> <span class="post-toc-text">一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Handler"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">聊一聊Android的消息机制</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017年03月10日 17:37" datetime="2017-03-10T09:37:59.736Z"  itemprop="datePublished">2017-03-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h5 id="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"><a href="#一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。" class="headerlink" title="一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"></a>一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。</h5><p>今天我们主要来聊一聊进程内部的消息机制<strong>Handler</strong>。</p>
 <p>从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：</p>
 <ol>
 <li>消息发送者</li>
@@ -91,44 +285,268 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> Looper::pollInner(<span class="keyword">int</span> timeoutMillis) &#123;</div><div class="line">	.....</div><div class="line"></div><div class="line">    <span class="comment">// Poll.</span></div><div class="line">    <span class="keyword">int</span> result = ALOOPER_POLL_WAKE;</div><div class="line">    mResponses.clear();</div><div class="line">    mResponseIndex = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">struct</span> epoll_event eventItems[EPOLL_MAX_EVENTS];</div><div class="line">    <span class="keyword">int</span> eventCount = epoll_wait(mEpollFd, eventItems, EPOLL_MAX_EVENTS, timeoutMillis);</div><div class="line"></div><div class="line">    <span class="comment">// Acquire lock.</span></div><div class="line">    mLock.lock();</div><div class="line"></div><div class="line">    <span class="comment">// Check for poll error.</span></div><div class="line">    <span class="keyword">if</span> (eventCount &lt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (errno == EINTR) &#123;</div><div class="line">            <span class="keyword">goto</span> Done;</div><div class="line">        &#125;</div><div class="line">        ALOGW(<span class="string">"Poll failed with an unexpected error, errno=%d"</span>, errno);</div><div class="line">        result = ALOOPER_POLL_ERROR;</div><div class="line">        <span class="keyword">goto</span> Done;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Check for poll timeout.</span></div><div class="line">    <span class="keyword">if</span> (eventCount == <span class="number">0</span>) &#123;</div><div class="line">		.....</div><div class="line">        result = ALOOPER_POLL_TIMEOUT;</div><div class="line">        <span class="keyword">goto</span> Done;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">	.....</div><div class="line">      </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; eventCount; i++) &#123;</div><div class="line">        <span class="keyword">int</span> fd = eventItems[i].data.fd;</div><div class="line">        <span class="keyword">uint32_t</span> epollEvents = eventItems[i].events;</div><div class="line">        <span class="keyword">if</span> (fd == mWakeReadPipeFd) &#123;</div><div class="line">            <span class="keyword">if</span> (epollEvents &amp; EPOLLIN) &#123;</div><div class="line">                awoken();</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                ALOGW(<span class="string">"Ignoring unexpected epoll events 0x%x on wake read pipe."</span>, epollEvents);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">           .....</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">Done: ;</div><div class="line"></div><div class="line">    <span class="comment">// Invoke pending message callbacks.</span></div><div class="line">    mNextMessageUptime = LLONG_MAX;</div><div class="line">    <span class="keyword">while</span> (mMessageEnvelopes.size() != <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">nsecs_t</span> now = systemTime(SYSTEM_TIME_MONOTONIC);</div><div class="line">        <span class="keyword">const</span> MessageEnvelope&amp; messageEnvelope = mMessageEnvelopes.itemAt(<span class="number">0</span>);</div><div class="line">        <span class="keyword">if</span> (messageEnvelope.uptime &lt;= now) &#123;</div><div class="line">            <span class="comment">// Remove the envelope from the list.</span></div><div class="line">            <span class="comment">// We keep a strong reference to the handler until the call to handleMessage</span></div><div class="line">            <span class="comment">// finishes.  Then we drop it so that the handler can be deleted *before*</span></div><div class="line">            <span class="comment">// we reacquire our lock.</span></div><div class="line">            &#123; <span class="comment">// obtain handler</span></div><div class="line">                sp&lt;MessageHandler&gt; handler = messageEnvelope.handler;</div><div class="line">                Message message = messageEnvelope.message;</div><div class="line">                mMessageEnvelopes.removeAt(<span class="number">0</span>);</div><div class="line">                mSendingMessage = <span class="literal">true</span>;</div><div class="line">                mLock.unlock();</div><div class="line"></div><div class="line">				....</div><div class="line">                handler-&gt;handleMessage(message);</div><div class="line">            &#125; <span class="comment">// release handler</span></div><div class="line"></div><div class="line">            mLock.lock();</div><div class="line">            mSendingMessage = <span class="literal">false</span>;</div><div class="line">            result = ALOOPER_POLL_CALLBACK;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// The last message left at the head of the queue determines the next wakeup time.</span></div><div class="line">            mNextMessageUptime = messageEnvelope.uptime;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// Release lock.</span></div><div class="line">    mLock.unlock();</div><div class="line"></div><div class="line">    <span class="comment">// Invoke all response callbacks.</span></div><div class="line">   ......</div><div class="line">     </div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这个函数比较长并且其中用到了goto，我们仍然只关注核心代码，我们看到函数开头首先是调用epoll_wait函数来看看epoll专用文件描述符mEpollFd所监控的文件描述符是否有IO事件发生，它设置监控的超时时间为pollOnce函数传递过来的timeoutMillis：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> eventCount = epoll_wait(mEpollFd, eventItems, EPOLL_MAX_EVENTS, timeoutMillis);</div></pre></td></tr></table></figure>
-]]></content>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-03-14T09:38:51.373Z" itemprop="dateUpdated">2017年3月14日 17:38</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2017/03/10/Handler/" target="_blank" rel="external">http://yoursite.com/2017/03/10/Handler/</a>
+    </div>
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="JasonZhang">
+            JasonZhang
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
     
-    <summary type="html">
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2017/03/10/Handler/&title=《聊一聊Android的消息机制》 — JasonZhang's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2017/03/10/Handler/&title=《聊一聊Android的消息机制》 — JasonZhang's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/03/10/Handler/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《聊一聊Android的消息机制》 — JasonZhang's Blog&url=http://yoursite.com/2017/03/10/Handler/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2017/03/10/Handler/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
     
-      &lt;h5 id=&quot;一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。&quot;&gt;&lt;a href=&quot;#一、Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者
-    
-    </summary>
-    
-      <category term="Android" scheme="http://yoursite.com/categories/Android/"/>
-    
-    
-  </entry>
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/03/07/hello-world/"/>
-    <id>http://yoursite.com/2017/03/07/hello-world/</id>
-    <published>2017-03-07T09:45:43.459Z</published>
-    <updated>2017-03-07T09:45:43.466Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
-    
-    </summary>
-    
-    
-  </entry>
+
   
-</feed>
+    <div class="waves-block waves-effect next">
+      <a href="/2017/03/07/hello-world/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hello World</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="Handler" data-title="聊一聊Android的消息机制" data-url="http://yoursite.com/2017/03/10/Handler/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('/js/embed.min.js?v=1.4.9');
+
+
+</script>
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            <span>博客内容遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JasonZhang's Blog &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2017/03/10/Handler/&title=《聊一聊Android的消息机制》 — JasonZhang's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2017/03/10/Handler/&title=《聊一聊Android的消息机制》 — JasonZhang's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/03/10/Handler/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《聊一聊Android的消息机制》 — JasonZhang's Blog&url=http://yoursite.com/2017/03/10/Handler/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2017/03/10/Handler/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAAByElEQVR42u3aQY7DIAwF0N7/0h1ptqOm/+NAO9JjVYUqPLKwbMzjEY/n73j1/NX4+59XT24euLi4Y26+ZLJ8i87fgIuLe557HbySxa4/wavZ3ICLi/ud3Oslk9l8w7i4uP+FO9lA+zlwcXG/gbujdElONjbWari4uAPuJOjc9Xvj+S4uLm7JfZYjT24SSr06Li7uEe718vemJskRSbRhXFzcI9y2mGkLm/wyR9KGwcXF3c1tr1y0DdQk8OVtG1xc3E9x2zbqWkrUJk+LdzpwcXHH3Pagsw1hSRLz5pPh4uIe5xYXIOLZeZekLuJwcXE3cydhaO1CRr0nXFzcDdy19mde3kwatHVbBRcX9yZuGz7aw9C2EMLFxf0ebpuatA2YdjZqpeDi4m7j5oXHPN3JD17ftHNwcXE3c/NQlScl7SFsnjbh4uKe5OZlTzKbFzltuYWLi3uSm4952+M6hI1aJri4uDdx71pmrW/Tlkm4uLgnuWvBa97dXdwwLi7uQW4evNbaJGsRtDjfxcXF/RA3CUAJrr3G8chfiouL+yFu0nTJg2B7+QMXF/cktz3saBOUtcsZo1oNFxd3wF1rsq6FpzaFwsXFPc79ATClJQtrmY6RAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.4.9"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.4.9" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
