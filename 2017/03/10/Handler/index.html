@@ -13,7 +13,7 @@
     
     
     
-    <title>Android的消息机制分析 | JasonZhang&#39;s Blog | null</title>
+    <title>Android的消息机制分析 | JasonZhang&#39;s Blog | 开发心得</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -30,7 +30,7 @@
 简单示意图如下：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android的消息机制分析">
-<meta property="og:url" content="http://yoursite.com/2017/03/10/Handler/index.html">
+<meta property="og:url" content="http://edgerCode.github.io/2017/03/10/Handler/index.html">
 <meta property="og:site_name" content="JasonZhang's Blog">
 <meta property="og:description" content="Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。1. 概述今天我们主要来聊一聊进程内部的消息机制Handler。
 从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：
@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/android/handler/xiaoxi01.png">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/android/handler/ThreadLocal.png">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/android/handler/handler-async.png">
-<meta property="og:updated_time" content="2017-03-15T06:30:35.974Z">
+<meta property="og:updated_time" content="2017-03-20T01:34:44.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android的消息机制分析">
 <meta name="twitter:description" content="Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。1. 概述今天我们主要来聊一聊进程内部的消息机制Handler。
@@ -319,19 +319,19 @@
 <p>函数最后调用queue.enqueueMessage来把这个消息加入到消息队列中，具体实现在<a href="http://androidxref.com/4.2_r1/xref/frameworks/base/core/java/android/os/MessageQueue.java" target="_blank" rel="external">MessageQueue.java</a>文件中：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">enqueueMessage</span><span class="params">(Message msg, <span class="keyword">long</span> when)</span> </span>&#123;</div><div class="line">    ......</div><div class="line"></div><div class="line">    <span class="keyword">boolean</span> needWake;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">       .......</div><div class="line"></div><div class="line">        msg.when = when;</div><div class="line">        Message p = mMessages;</div><div class="line">        <span class="keyword">if</span> (p == <span class="keyword">null</span> || when == <span class="number">0</span> || when &lt; p.when) &#123;</div><div class="line">            <span class="comment">// New head, wake up the event queue if blocked.</span></div><div class="line">          <span class="comment">// 此时，新消息会插入到链表的表头，这意味着队列需要调整唤醒时间啦。</span></div><div class="line">            msg.next = p;</div><div class="line">            mMessages = msg;</div><div class="line">            needWake = mBlocked;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// Inserted within the middle of the queue.  Usually we don't have to wake</span></div><div class="line">            <span class="comment">// up the event queue unless there is a barrier at the head of the queue</span></div><div class="line">            <span class="comment">// and the message is the earliest asynchronous message in the queue.</span></div><div class="line">          <span class="comment">// 此时，新消息会插入到链表的内部，一般情况下，这不需要调整唤醒时间。</span></div><div class="line">          <span class="comment">// 但还必须考虑到当表头为“同步分隔栏”的情况</span></div><div class="line">            needWake = mBlocked &amp;&amp; p.target == <span class="keyword">null</span> &amp;&amp; msg.isAsynchronous();</div><div class="line">            Message prev;</div><div class="line">            <span class="keyword">for</span> (;;) &#123;</div><div class="line">                prev = p;</div><div class="line">                p = p.next;</div><div class="line">                <span class="keyword">if</span> (p == <span class="keyword">null</span> || when &lt; p.when) &#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (needWake &amp;&amp; p.isAsynchronous()) &#123;</div><div class="line">                  <span class="comment">// 说明即便msg是异步的，也不是链表中第一个异步消息，所以没必要唤醒了</span></div><div class="line">                    needWake = <span class="keyword">false</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            msg.next = p; <span class="comment">// invariant: p == prev.next</span></div><div class="line">            prev.next = msg;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (needWake) &#123;</div><div class="line">        nativeWake(mPtr);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>从这段代码来看MessageQueue说是一个消息队列，但它其实不是队列，而是一个链表。</p>
-<p>把消息加入到消息队列时，分两种情况，一种当前消息队列为空时，这时候应用程序的主线程一般就是处于空闲等待状态了，这时候就要唤醒它，另一种情况是应用程序的消息队列不为空，这时候就不需要唤醒应用程序的主线程了，因为这时候它一定是在忙着处于消息队列中的消息，因此不会处于空闲等待的状态。</p>
+<p>把消息加入到消息队列时，分两种情况，一种当前消息队列为空时，这时候线程一般就是处于空闲等待状态了，这时候就要唤醒它，另一种情况是消息队列不为空，这时候就不需要唤醒线程了，因为这时候它一定是在忙着处于消息队列中的消息，因此不会处于空闲等待的状态。</p>
 <p>第一种情况比较简单，只要把消息放在消息队列头就可以了：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">msg.next = p;  </div><div class="line">mMessages = msg;  </div><div class="line">needWake = mBlocked;</div></pre></td></tr></table></figure>
 <p> 第二种情况相对就比较复杂一些了，前面我们说过，当往消息队列中发送消息时，是可以指定消息的处理时间的，而消息队列中的消息，就是按照这个时间从小到大来排序的，因此，当把新的消息加入到消息队列时，就要根据它的处理时间来找到合适的位置，然后再放进消息队列中去：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Message prev;</div><div class="line"><span class="keyword">for</span> (;;) &#123;</div><div class="line">  prev = p;</div><div class="line">  p = p.next;</div><div class="line">  <span class="keyword">if</span> (p == <span class="keyword">null</span> || when &lt; p.when) &#123;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (needWake &amp;&amp; p.isAsynchronous()) &#123;</div><div class="line">    needWake = <span class="keyword">false</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">msg.next = p; <span class="comment">// invariant: p == prev.next</span></div><div class="line">prev.next = msg;</div></pre></td></tr></table></figure>
-<p>把消息加入到消息队列去后，如果应用程序的主线程正处于空闲等待状态，就需要调用natvieWake函数来唤醒它了，这是一个JNI方法，定义在<a href="http://androidxref.com/5.0.0_r2/xref/frameworks/base/core/jni/android_os_MessageQueue.cpp" target="_blank" rel="external">android_os_MessageQueue.cpp</a>文件中：</p>
+<p>把消息加入到消息队列去后，如果线程正处于空闲等待状态，就需要调用natvieWake函数来唤醒它了，这是一个JNI方法，定义在<a href="http://androidxref.com/5.0.0_r2/xref/frameworks/base/core/jni/android_os_MessageQueue.cpp" target="_blank" rel="external">android_os_MessageQueue.cpp</a>文件中：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">android_os_MessageQueue_nativeWake</span><span class="params">(JNIEnv* env, jclass clazz, jlong ptr)</span> </span>&#123;</div><div class="line">    NativeMessageQueue* nativeMessageQueue = <span class="keyword">reinterpret_cast</span>&lt;NativeMessageQueue*&gt;(ptr);</div><div class="line">    <span class="keyword">return</span> nativeMessageQueue-&gt;wake();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这个JNI层的NativeMessageQueue对象我们在前面分析消息循环的时候创建好的，保存在Java层的MessageQueue对象的mPtr成员变量中，这里把它取回来之后，就调用它的wake函数来唤醒应用程序的主线程，wake方法也在<a href="http://androidxref.com/5.0.0_r2/xref/frameworks/base/core/jni/android_os_MessageQueue.cpp" target="_blank" rel="external">android_os_MessageQueue.cpp</a>文件中：</p>
+<p>这个JNI层的NativeMessageQueue对象我们在前面分析消息循环的时候创建好的，保存在Java层的MessageQueue对象的mPtr成员变量中，这里把它取回来之后，就调用它的wake函数来唤醒关联的线程，wake方法也在<a href="http://androidxref.com/5.0.0_r2/xref/frameworks/base/core/jni/android_os_MessageQueue.cpp" target="_blank" rel="external">android_os_MessageQueue.cpp</a>文件中：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> NativeMessageQueue::wake() &#123;</div><div class="line">    mLooper-&gt;wake();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p> 这里它又通过成员变量mLooper的wake函数来执行操作，这里的mLooper成员变量是一个C++层实现的Looper对象，它定义在<a href="http://androidxref.com/5.0.0_r2/xref/system/core/libutils/Looper.cpp" target="_blank" rel="external">Looper.cpp</a>文件中：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> Looper::wake() &#123;</div><div class="line">	......</div><div class="line">    <span class="keyword">ssize_t</span> nWrite;</div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">        nWrite = write(mWakeWritePipeFd, <span class="string">"W"</span>, <span class="number">1</span>);</div><div class="line">    &#125; <span class="keyword">while</span> (nWrite == <span class="number">-1</span> &amp;&amp; errno == EINTR);</div><div class="line"></div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 这个wake函数很简单，只是通过打开文件描述符mWakeWritePipeFd往管道的写入一个”W”字符串。其实，往管道写入什么内容并不重要，往管道写入内容的目的是为了唤醒应用程序的主线程。前面我们在分析应用程序的消息循环时说到，当应用程序的消息队列中没有消息处理时，应用程序的主线程就会进入空闲等待状态，而这个空闲等待状态就是通过调用这个Looper类的pollInner函数来进入的，具体就是在pollInner函数中调用epoll_wait函数来等待管道中有内容可读的。</p>
-<p>这时候既然管道中有内容可读了，应用程序的主线程就会从这里的Looper类的pollInner函数返回到JNI层的nativePollOnce函数，最后返回到Java层中的MessageQueue.next方法中去，这里它就会发现消息队列中有新的消息需要处理了，于就会处理这个消息。</p>
+<p> 这个wake函数很简单，只是通过打开文件描述符mWakeWritePipeFd往管道的写入一个”W”字符串。其实，往管道写入什么内容并不重要，往管道写入内容的目的是为了唤醒关联的线程。前面我们在分析应用程序的消息循环时说到，当消息队列中没有消息处理时，关联的线程就会进入空闲等待状态，而这个空闲等待状态就是通过调用这个Looper类的pollInner函数来进入的，具体就是在pollInner函数中调用epoll_wait函数来等待管道中有内容可读的。</p>
+<p>这时候既然管道中有内容可读了，关联的线程就会从这里的Looper类的pollInner函数返回到JNI层的nativePollOnce函数，最后返回到Java层中的MessageQueue.next方法中去，这里它就会发现消息队列中有新的消息需要处理了，于就会处理这个消息。</p>
 <h4 id="4-消息处理"><a href="#4-消息处理" class="headerlink" title="4. 消息处理"></a>4. 消息处理</h4><p>前面第一部分分析消息循环时，在Looper类的looper方法中进行消息循环的，这个方法中从消息队列中获取到消息对象msg后，就会调用它的target成员变量的dispatchMessage方法来处理这个消息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</div><div class="line">      <span class="keyword">final</span> Looper me = myLooper();</div><div class="line">    	......</div><div class="line">      <span class="keyword">final</span> MessageQueue queue = me.mQueue;</div><div class="line">......</div><div class="line">      <span class="keyword">for</span> (;;) &#123;</div><div class="line">          Message msg = queue.next(); <span class="comment">// might block</span></div><div class="line">          </div><div class="line">        	.......</div><div class="line">            </div><div class="line">          msg.target.dispatchMessage(msg);</div><div class="line"></div><div class="line">          ......</div><div class="line"></div><div class="line">          msg.recycleUnchecked();</div><div class="line">      &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
 <p>在前面分析消息的发送时说过，这个消息对象msg的成员变量target是在发送消息的时候设置好的，通过哪个Handler来发送消息，就通过哪个Handler来处理消息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Handler</span> </span>&#123;</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) &#123;</div><div class="line">            handleCallback(msg);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="keyword">if</span> (mCallback.handleMessage(msg)) &#123;</div><div class="line">                    <span class="keyword">return</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            handleMessage(msg);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这里的消息对象msg的callback成员变量和Handler类的mCallBack成员变量一般都为null，于是，就会调用Handler类的handleMessage方法来处理这个消息，这就到了我们平常使用Handler的时候重写的Handler的方法handlerMessage。</p>
@@ -407,14 +407,14 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2017-03-15T06:30:35.974Z" itemprop="dateUpdated">2017年3月15日 14:30</time>
+    最后更新时间：<time datetime="2017-03-20T01:34:44.876Z" itemprop="dateUpdated">2017年3月20日 9:34</time>
 </span><br>
 
 
         转载请注明出处！
     </div>
     <footer>
-        <a href="http://yoursite.com">
+        <a href="http://edgerCode.github.io">
             <img src="/img/avatar.jpg" alt="JasonZhang">
             JasonZhang
         </a>
@@ -438,7 +438,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://edgerCode.github.io/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&pic=http://edgerCode.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -448,22 +448,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://edgerCode.github.io/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/03/10/Handler/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://edgerCode.github.io/2017/03/10/Handler/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android的消息机制分析》 — JasonZhang's Blog&url=http://yoursite.com/2017/03/10/Handler/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android的消息机制分析》 — JasonZhang's Blog&url=http://edgerCode.github.io/2017/03/10/Handler/&via=http://edgerCode.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2017/03/10/Handler/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://edgerCode.github.io/2017/03/10/Handler/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -501,7 +501,7 @@
     
 
 <div class="comments" id="comments">
-    <div class="ds-thread" data-thread-key="Handler" data-title="Android的消息机制分析" data-url="http://yoursite.com/2017/03/10/Handler/"></div>
+    <div class="ds-thread" data-thread-key="Handler" data-title="Android的消息机制分析" data-url="http://edgerCode.github.io/2017/03/10/Handler/"></div>
 </div>
 <script>
 lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
@@ -583,7 +583,7 @@ lazyScripts.push('/js/embed.min.js?v=1.4.9');
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://edgerCode.github.io/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&pic=http://edgerCode.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -593,22 +593,22 @@ lazyScripts.push('/js/embed.min.js?v=1.4.9');
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://edgerCode.github.io/2017/03/10/Handler/&title=《Android的消息机制分析》 — JasonZhang's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/03/10/Handler/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://edgerCode.github.io/2017/03/10/Handler/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android的消息机制分析》 — JasonZhang's Blog&url=http://yoursite.com/2017/03/10/Handler/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android的消息机制分析》 — JasonZhang's Blog&url=http://edgerCode.github.io/2017/03/10/Handler/&via=http://edgerCode.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2017/03/10/Handler/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://edgerCode.github.io/2017/03/10/Handler/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -619,7 +619,7 @@ lazyScripts.push('/js/embed.min.js?v=1.4.9');
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAAByElEQVR42u3aQY7DIAwF0N7/0h1ptqOm/+NAO9JjVYUqPLKwbMzjEY/n73j1/NX4+59XT24euLi4Y26+ZLJ8i87fgIuLe557HbySxa4/wavZ3ICLi/ud3Oslk9l8w7i4uP+FO9lA+zlwcXG/gbujdElONjbWari4uAPuJOjc9Xvj+S4uLm7JfZYjT24SSr06Li7uEe718vemJskRSbRhXFzcI9y2mGkLm/wyR9KGwcXF3c1tr1y0DdQk8OVtG1xc3E9x2zbqWkrUJk+LdzpwcXHH3Pagsw1hSRLz5pPh4uIe5xYXIOLZeZekLuJwcXE3cydhaO1CRr0nXFzcDdy19mde3kwatHVbBRcX9yZuGz7aw9C2EMLFxf0ebpuatA2YdjZqpeDi4m7j5oXHPN3JD17ftHNwcXE3c/NQlScl7SFsnjbh4uKe5OZlTzKbFzltuYWLi3uSm4952+M6hI1aJri4uDdx71pmrW/Tlkm4uLgnuWvBa97dXdwwLi7uQW4evNbaJGsRtDjfxcXF/RA3CUAJrr3G8chfiouL+yFu0nTJg2B7+QMXF/cktz3saBOUtcsZo1oNFxd3wF1rsq6FpzaFwsXFPc79ATClJQtrmY6RAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aS27DMAwFwN7/0u62QFLnkXQLSBqtiiSNNVkQ/H19xef6cXqvv37m9fXfvu2xg4GBsSzjuj09xv0Vk5PfDQMD4xxGcon7zyefTAJxNUxjYGBgJFdPvueedB9wMTAwMHqMPJgmqd6k9MXAwDiHkQe+Sest+c4/r8UxMDAWZORd9///+0/mGxgYGEsxJs36JF3Lw+U1OBgYGHszqq20+VJFniaW74OBgbEpIykLq+Xl/X89teQRXREDA2M7xmT9azIYmBS6bwIuBgbGdoxqMjcPx9W0r7DAgYGBcQCj2mKrDiB7WVz+LAwMjDMZ1aSwF0B7qWRhkImBgbEFIx8AVENhddg5uQkGBsaujGqhOG+T9crgctcQAwNja0Zv6FhNFvPCOEoxMTAwtmbkgW8yqnxqR6JcvmJgYGzByINmPqqsXro3nChnuBgYGMsyyuXiuHC9gpOH7ObvhIGBsSCj2hTrte+rQ9BmeYyBgbEpY37FJDT3gnvhR8HAwDiGkVwiLzt7PbFmAoqBgXEM46k2Wa/131u8wMDAOIcxWYyYt/7zttqHIhYDA2M7xlU8+cLWfLSZDyQwMDD2ZlQng9VCNHn8pHxtDjgxMDAWZMyDbHL1avIXFa551MfAwNiCUQ2UySMnDbjktm8CLgYGBkZrkau6itF7FwMDA+Opltl88eJDEYuBgbE1o7rukAwpq8scyY+FgYFxJqNXOk4Swd6A4YFBJgYGxnqMb62tGQaTxHsOAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 
