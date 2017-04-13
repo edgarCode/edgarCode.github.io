@@ -4,9 +4,9 @@
   <subtitle>开发心得</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://edgerCode.github.io/"/>
+  <link href="http://jasonzhang.github.io/"/>
   <updated>2017-03-20T01:34:44.876Z</updated>
-  <id>http://edgerCode.github.io/</id>
+  <id>http://jasonzhang.github.io/</id>
   
   <author>
     <name>JasonZhang</name>
@@ -17,8 +17,8 @@
   
   <entry>
     <title>Android的消息机制分析</title>
-    <link href="http://edgerCode.github.io/2017/03/10/Handler/"/>
-    <id>http://edgerCode.github.io/2017/03/10/Handler/</id>
+    <link href="http://jasonzhang.github.io/2017/03/10/Handler/"/>
+    <id>http://jasonzhang.github.io/2017/03/10/Handler/</id>
     <published>2017-03-10T09:37:59.736Z</published>
     <updated>2017-03-20T01:34:44.876Z</updated>
     
@@ -219,15 +219,15 @@
     
     </summary>
     
-      <category term="Android" scheme="http://edgerCode.github.io/categories/Android/"/>
+      <category term="Android" scheme="http://jasonzhang.github.io/categories/Android/"/>
     
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="http://edgerCode.github.io/2017/03/07/hello-world/"/>
-    <id>http://edgerCode.github.io/2017/03/07/hello-world/</id>
+    <link href="http://jasonzhang.github.io/2017/03/07/hello-world/"/>
+    <id>http://jasonzhang.github.io/2017/03/07/hello-world/</id>
     <published>2017-03-07T09:45:43.459Z</published>
     <updated>2017-03-07T09:45:43.466Z</updated>
     
