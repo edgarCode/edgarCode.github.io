@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-03-20T01:34:44.876Z</updated>
+  <updated>2017-04-18T10:30:52.103Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -16,11 +16,61 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>you-get遇到的坑</title>
+    <link href="http://jasonzhang1986.github.io/2017/04/18/you-get/"/>
+    <id>http://jasonzhang1986.github.io/2017/04/18/you-get/</id>
+    <published>2017-04-18T09:37:26.264Z</published>
+    <updated>2017-04-18T10:30:52.103Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="you-get遇到的坑"><a href="#you-get遇到的坑" class="headerlink" title="you-get遇到的坑"></a>you-get遇到的坑</h2><ol>
+<li><p>you-get好用的下载器 <a href="https://github.com/soimort/you-get" target="_blank" rel="external">https://github.com/soimort/you-get</a></p>
+</li>
+<li><p>我使用choco install的，官方提供了多种安装方式总有一款适合你</p>
+</li>
+<li><p>使用Shadowsocks代理，在下载YouTube的时候出现SSL错误，证书认证错误，查看帮助(you-get –help)看到有sock-proxy选项</p>
+<p><img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170418/182733080.png" alt="help"></p>
+</li>
+<li><p>于是使用如下命令（–debug是显示debug信息）：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">you-<span class="keyword">get</span> -s <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span> --debug -i <span class="string">'https://www.youtube.com/watch?v=jNQXAC9IVRw'</span></div></pre></td></tr></table></figure>
+<p>结果如下图</p>
+<p><img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170418/180732935.png" alt="info"></p>
+<p>可以看到是展示了多种分辨率，那我们就可以选择需要的分辨率下载了</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">you-<span class="keyword">get</span> -s <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">1080</span> --debug --itag=<span class="number">242</span> <span class="string">'https://www.youtube.com/watch?v=jNQXAC9IVRw'</span></div></pre></td></tr></table></figure>
+<p>结果下载失败：</p>
+<p><img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170418/181213644.png" alt="失败"></p>
+</li>
+<li><p>曾遇到过需要安装PySocks这个库，在使用pip install的时候出现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install fails <span class="keyword">with</span> “connection error: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:<span class="number">598</span>)”</div></pre></td></tr></table></figure>
+<p>通过Google通过添加trust参数来解决</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip3 install --index-url=http://pypi.python.org/simple/ --trusted-host pypi.python.org  pythonPackage</div></pre></td></tr></table></figure>
+</li>
+<li><p>下载失败或者SSL问题仍然出现，查看issue发现不止我一人遇到这样的问题</p>
+<p><a href="https://github.com/soimort/you-get/issues/1684" target="_blank" rel="external">https://github.com/soimort/you-get/issues/1684</a></p>
+<p>发现也没有好的解决方案，决定换个vpn试试，改换Greenvpn之后再次尝试</p>
+<p><img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170418/182110934.png" alt="result"></p>
+<p>终于下载成功！！！</p>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;you-get遇到的坑&quot;&gt;&lt;a href=&quot;#you-get遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;you-get遇到的坑&quot;&gt;&lt;/a&gt;you-get遇到的坑&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;you-get好用的下载器 &lt;a href=&quot;ht
+    
+    </summary>
+    
+      <category term="工具" scheme="http://jasonzhang1986.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Android的消息机制分析</title>
     <link href="http://jasonzhang1986.github.io/2017/03/10/Handler/"/>
     <id>http://jasonzhang1986.github.io/2017/03/10/Handler/</id>
     <published>2017-03-10T09:37:59.736Z</published>
-    <updated>2017-03-20T01:34:44.876Z</updated>
+    <updated>2017-04-18T10:30:18.321Z</updated>
     
     <content type="html"><![CDATA[<h5 id="Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"><a href="#Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。" class="headerlink" title="Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"></a>Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。</h5><h4 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h4><p>今天我们主要来聊一聊进程内部的消息机制<strong>Handler</strong>。</p>
 <p>从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：</p>
