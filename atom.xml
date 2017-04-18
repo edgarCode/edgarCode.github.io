@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-04-18T10:30:52.103Z</updated>
+  <updated>2017-04-18T10:33:20.204Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="http://jasonzhang1986.github.io/2017/04/18/you-get/"/>
     <id>http://jasonzhang1986.github.io/2017/04/18/you-get/</id>
     <published>2017-04-18T09:37:26.264Z</published>
-    <updated>2017-04-18T10:30:52.103Z</updated>
+    <updated>2017-04-18T10:33:20.204Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="you-get遇到的坑"><a href="#you-get遇到的坑" class="headerlink" title="you-get遇到的坑"></a>you-get遇到的坑</h2><ol>
+    <content type="html"><![CDATA[<ol>
 <li><p>you-get好用的下载器 <a href="https://github.com/soimort/you-get" target="_blank" rel="external">https://github.com/soimort/you-get</a></p>
 </li>
 <li><p>我使用choco install的，官方提供了多种安装方式总有一款适合你</p>
@@ -55,8 +55,8 @@
     
     <summary type="html">
     
-      &lt;h2 id=&quot;you-get遇到的坑&quot;&gt;&lt;a href=&quot;#you-get遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;you-get遇到的坑&quot;&gt;&lt;/a&gt;you-get遇到的坑&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;you-get好用的下载器 &lt;a href=&quot;ht
+      &lt;ol&gt;
+&lt;li&gt;&lt;p&gt;you-get好用的下载器 &lt;a href=&quot;https://github.com/soimort/you-get&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/soimort/you-get&lt;/a&gt;
     
     </summary>
     
