@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-04-18T10:34:01.144Z</updated>
+  <updated>2017-04-20T08:00:32.283Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -14,6 +14,53 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Atom遇到的坑</title>
+    <link href="http://jasonzhang1986.github.io/2017/04/20/Atom%E6%8F%92%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%A4%B1%E8%B4%A5/"/>
+    <id>http://jasonzhang1986.github.io/2017/04/20/Atom插件下载失败/</id>
+    <published>2017-04-20T07:51:25.311Z</published>
+    <updated>2017-04-20T08:00:32.283Z</updated>
+    
+    <content type="html"><![CDATA[<p>win10下atom安装插件失败，提示如下图：<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170420/155306097.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure></p>
+<p>然后我尝试用apm install的方式，结果：<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170420/155517110.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure></p>
+<p>Google搜索发现不少人遇到同样的问题，在atom-china上发现一个方法可用，这里记录下：</p>
+<p>我也碰到过这个问题，后来解决了，似乎是因为墙的问题。<br>如果你把 Show output，点开，可以看到跟下面类似的信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">gyp info it worked if it ends with ok</div><div class="line">gyp info using node-gyp@2.0.2</div><div class="line">gyp info using node@0.10.40 | win32 | ia32</div><div class="line">gyp http GET https://atom.io/download/atom-shell/v0.30.7/node-v0.30.7.tar.gz</div><div class="line">gyp WARN install got an error, rolling back install</div><div class="line">gyp</div></pre></td></tr></table></figure></p>
+<p>我的解决方案是设置代理：</p>
+<p>打开 C:\Users\XXX.atom\ 目录下的.apmrc配置文件（没有就新建一个）,然后添加代理信息：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">strict-ssl=false</div><div class="line">https-proxy=http://127.0.0.1:1080/</div><div class="line">http-proxy =http://127.0.0.1:1080/</div></pre></td></tr></table></figure></p>
+<p>这里的 <a href="http://127.0.0.1:1080，是我自己的" target="_blank" rel="external">http://127.0.0.1:1080，是我自己的</a> Shadowsocks 代理，你需要设置成自己的可用代理。<br>然后再执行 apm install –check，应该可以测试成功，祝好运~~<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170420/155816206.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;win10下atom安装插件失败，提示如下图：&lt;br&gt;&lt;figure class=&quot;image-bubble&quot;&gt;
+                &lt;div class=&quot;img-lightbox&quot;&gt;
+                    &lt;div class=&quot;overl
+    
+    </summary>
+    
+      <category term="工具" scheme="http://jasonzhang1986.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>you-get遇到的坑</title>
