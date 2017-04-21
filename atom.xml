@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-04-20T08:00:32.283Z</updated>
+  <updated>2017-04-21T08:20:45.285Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -14,6 +14,74 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>AndroidStudio上传aar到Nexus</title>
+    <link href="http://jasonzhang1986.github.io/2017/04/21/NexusUpload/"/>
+    <id>http://jasonzhang1986.github.io/2017/04/21/NexusUpload/</id>
+    <published>2017-04-21T07:51:16.836Z</published>
+    <updated>2017-04-21T08:20:45.285Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。</p>
+<h2 id="1-发布Library到私服"><a href="#1-发布Library到私服" class="headerlink" title="1. 发布Library到私服"></a>1. 发布Library到私服</h2><p>先展示下我建立的Project的目录结果</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/155857574.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>app目录大家最熟悉了，是AS默认的主module的名字，utils目录就是我新建立的library module。</p>
+<p>接下来我们来配置maven的上传</p>
+<h3 id="配置pom参数"><a href="#配置pom参数" class="headerlink" title="配置pom参数"></a>配置pom参数</h3><p>项目根目录下的gradle.property中添加如下pom参数<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">POM_NAME=utils</div><div class="line">POM_VERSION=<span class="number">1.0</span><span class="number">.1</span></div><div class="line">POM_ARTIFACTID=utils</div><div class="line">POM_GROUPID=com.leplay.android</div><div class="line">POM_PACKAGING=aar</div><div class="line">POM_DESCRIPTION=utils <span class="keyword">for</span> Android</div></pre></td></tr></table></figure></p>
+<h3 id="配置Nexus参数"><a href="#配置Nexus参数" class="headerlink" title="配置Nexus参数"></a>配置Nexus参数</h3><p>因为Nexus相关参数是固定的，包含仓库地址、用户名和密码，我们把这些参数写到gradle的Global配置中，目录是<strong>C:\Users\(用户名)\.gradle\gradle.property</strong><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NEXUS_USERNAME=username</div><div class="line">NEXUS_PASSWORD=password</div><div class="line">NEXUS_REPOSITORY_URL=<span class="string">http:</span><span class="comment">//xxx/nexus/content/repositories/xxx/</span></div></pre></td></tr></table></figure></p>
+<h3 id="引入upload脚本"><a href="#引入upload脚本" class="headerlink" title="引入upload脚本"></a>引入upload脚本</h3><p>在library的build.gradle文件末尾加上如下引用：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">from:</span> <span class="string">'http://jasonzhang1986.github.io/nexus_upload.gradle'</span></div></pre></td></tr></table></figure></p>
+<p>这个nexus_upload.gradle脚本是参考大神的脚本修改，包含生成java-source和java-doc，具体实现细节可以进入看脚本代码。</p>
+<h3 id="uploadArchives"><a href="#uploadArchives" class="headerlink" title="uploadArchives"></a>uploadArchives</h3><p>编译并上传library，双击右侧gradle task中的uploadArchives</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161423364.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>等待一会出现Success字样，证明已经上传成功<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161553992.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure></p>
+<p>最后我们去Nexus上查看下，确实上传成功了</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161717319.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<h2 id="2-使用Nexus私服上的Library"><a href="#2-使用Nexus私服上的Library" class="headerlink" title="2. 使用Nexus私服上的Library"></a>2. 使用Nexus私服上的Library</h2><p>首先，要在项目的build.gradle里面声明私服的地址</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161921072.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>然后就是我们最熟悉的在module的build.gradle文件中添加依赖<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile <span class="string">'com.leplay.android:utils:1.0.1'</span></div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。&lt;/p&gt;
+&lt;h2 id=&quot;1-发布Library到私服&quot;&gt;&lt;a href=&quot;#1-发布Library到
+    
+    </summary>
+    
+      <category term="Android" scheme="http://jasonzhang1986.github.io/categories/Android/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Atom遇到的坑</title>

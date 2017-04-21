@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>AndroidStudio上传aar到Nexus | JasonZhang&#39;s Blog | 开发心得</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。
+1. 发布Library到私服先展示下我建立的Project的目录结果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidStudio上传aar到Nexus">
+<meta property="og:url" content="http://jasonzhang1986.github.io/2017/04/21/NexusUpload/index.html">
+<meta property="og:site_name" content="JasonZhang's Blog">
+<meta property="og:description" content="最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。
+1. 发布Library到私服先展示下我建立的Project的目录结果">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/155857574.png">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161423364.png">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161553992.png">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161717319.png">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161921072.png">
+<meta property="og:updated_time" content="2017-04-21T08:20:45.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AndroidStudio上传aar到Nexus">
+<meta name="twitter:description" content="最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。
+1. 发布Library到私服先展示下我建立的Project的目录结果">
+<meta name="twitter:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/155857574.png">
+    
+        <link rel="alternative" href="/atom.xml" title="JasonZhang&#39;s Blog" type="application/atom+xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.4.9">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Jason Zhang</h5>
+          <a href="mailto:jifengzhang.barlow@gmail.com" title="jifengzhang.barlow@gmail.com" class="mail">jifengzhang.barlow@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/jasonzhang1986" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/zhjfweibo" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">AndroidStudio上传aar到Nexus</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">AndroidStudio上传aar到Nexus</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-21T07:51:16.836Z" itemprop="datePublished" class="page-time">
+  2017-04-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-发布Library到私服"><span class="post-toc-number">1.</span> <span class="post-toc-text">1. 发布Library到私服</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置pom参数"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">配置pom参数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置Nexus参数"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">配置Nexus参数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#引入upload脚本"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">引入upload脚本</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#uploadArchives"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">uploadArchives</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-使用Nexus私服上的Library"><span class="post-toc-number">2.</span> <span class="post-toc-text">2. 使用Nexus私服上的Library</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-NexusUpload"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">AndroidStudio上传aar到Nexus</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017年04月21日 15:51" datetime="2017-04-21T07:51:16.836Z"  itemprop="datePublished">2017-04-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。</p>
+<h2 id="1-发布Library到私服"><a href="#1-发布Library到私服" class="headerlink" title="1. 发布Library到私服"></a>1. 发布Library到私服</h2><p>先展示下我建立的Project的目录结果</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/155857574.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>app目录大家最熟悉了，是AS默认的主module的名字，utils目录就是我新建立的library module。</p>
+<p>接下来我们来配置maven的上传</p>
+<h3 id="配置pom参数"><a href="#配置pom参数" class="headerlink" title="配置pom参数"></a>配置pom参数</h3><p>项目根目录下的gradle.property中添加如下pom参数<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">POM_NAME=utils</div><div class="line">POM_VERSION=<span class="number">1.0</span><span class="number">.1</span></div><div class="line">POM_ARTIFACTID=utils</div><div class="line">POM_GROUPID=com.leplay.android</div><div class="line">POM_PACKAGING=aar</div><div class="line">POM_DESCRIPTION=utils <span class="keyword">for</span> Android</div></pre></td></tr></table></figure></p>
+<h3 id="配置Nexus参数"><a href="#配置Nexus参数" class="headerlink" title="配置Nexus参数"></a>配置Nexus参数</h3><p>因为Nexus相关参数是固定的，包含仓库地址、用户名和密码，我们把这些参数写到gradle的Global配置中，目录是<strong>C:\Users\(用户名)\.gradle\gradle.property</strong><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NEXUS_USERNAME=username</div><div class="line">NEXUS_PASSWORD=password</div><div class="line">NEXUS_REPOSITORY_URL=<span class="string">http:</span><span class="comment">//xxx/nexus/content/repositories/xxx/</span></div></pre></td></tr></table></figure></p>
+<h3 id="引入upload脚本"><a href="#引入upload脚本" class="headerlink" title="引入upload脚本"></a>引入upload脚本</h3><p>在library的build.gradle文件末尾加上如下引用：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">from:</span> <span class="string">'http://jasonzhang1986.github.io/nexus_upload.gradle'</span></div></pre></td></tr></table></figure></p>
+<p>这个nexus_upload.gradle脚本是参考大神的脚本修改，包含生成java-source和java-doc，具体实现细节可以进入看脚本代码。</p>
+<h3 id="uploadArchives"><a href="#uploadArchives" class="headerlink" title="uploadArchives"></a>uploadArchives</h3><p>编译并上传library，双击右侧gradle task中的uploadArchives</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161423364.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>等待一会出现Success字样，证明已经上传成功<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161553992.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure></p>
+<p>最后我们去Nexus上查看下，确实上传成功了</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161717319.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<h2 id="2-使用Nexus私服上的Library"><a href="#2-使用Nexus私服上的Library" class="headerlink" title="2. 使用Nexus私服上的Library"></a>2. 使用Nexus私服上的Library</h2><p>首先，要在项目的build.gradle里面声明私服的地址</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161921072.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>然后就是我们最熟悉的在module的build.gradle文件中添加依赖<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile <span class="string">'com.leplay.android:utils:1.0.1'</span></div></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-04-21T08:20:45.285Z" itemprop="dateUpdated">2017年4月21日 16:20</time>
+</span><br>
+
+
+        转载请注明出处！
+    </div>
+    <footer>
+        <a href="http://jasonzhang1986.github.io">
+            <img src="/img/avatar.jpg" alt="Jason Zhang">
+            Jason Zhang
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/20/Atom插件下载失败/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Atom遇到的坑</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="NexusUpload" data-title="AndroidStudio上传aar到Nexus" data-url="http://jasonzhang1986.github.io/2017/04/21/NexusUpload/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('/js/embed.min.js?v=1.4.9');
+
+
+</script>
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            <span>博客内容遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JasonZhang's Blog &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3aS27bQBAFQN//0so2gGL5vW46AIfFlSCQnCkuGtOfr6/4ev11vf//fs/7/5+f+rzKZRcGBsZtGa+PV7JA/lT+OfK9YWBgPIfx3eZm92zCaLsuBgYGRvvqJPgm4RsDAwPjKsYm7fzugIiBgYGxSWLzTbTp63/NxTEwMG7I2CSWv/37V/obGBgYt2K8ymtT3M8/UL0rDAyMoxl5gCteF6ejyVPF8AcGBsbRjHbTeVKa39MOZ1xwZMTAwLgtI3msHZv47TIcBgbGcxhtWGy3vmkDFJ8SAwPjMYx2bKs9wCXvb4+VGBgYpzJmRfk84ZyVz+oyHAYGxgMYswCaNwnyElvL+EcnFgMD41DGLAjODnn5inlExcDAOJvRJrFJAS75nZft6tYFBgbGYxh5btgeEBNqC8bAwHgOIwlzm1fPjpirmREMDIwjGHmpa5Zq7kcooo+FgYFxNGMzMDE7XF41bIGBgfFMxqxJucFvxsh+aAlgYGAcykhunTUPkmGOfdkOAwPjOYz2cJako7OQHQXZto+BgYFxBKMd22oLZ/koRtv+xMDAOJUxG57Imweznmo7fIaBgXE2YzYqkSec+XZz8KrMh4GBcVvGLMhuavJXvW3Yx8DAwLgtI896Z7/bgbC68YmBgYERLDMLr5sVMTAwMPJS12wgtT16/hC+MTAwHsBoRyLyZsA+Gb643IaBgXFDxip1LEN226rcfBQMDIwjGH8AOZrk8zPPQpwAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.4.9"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.4.9" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
