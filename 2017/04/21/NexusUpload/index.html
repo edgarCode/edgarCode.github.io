@@ -13,13 +13,13 @@
     
     
     
-    <title>AndroidStudio上传aar到Nexus | JasonZhang&#39;s Blog | 开发心得</title>
+    <title>AndroidStudio上传aar到Nexus | JasonZhang&#39;s Blog | 码农Jason的心得</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="">
+    <meta name="keywords" content="Android,Nexus">
     <meta name="description" content="最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。
 1. 发布Library到私服先展示下我建立的Project的目录结果">
 <meta property="og:type" content="article">
@@ -33,17 +33,17 @@
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161553992.png">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161717319.png">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/161921072.png">
-<meta property="og:updated_time" content="2017-04-21T08:20:45.285Z">
+<meta property="og:updated_time" content="2017-04-27T07:31:47.639Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AndroidStudio上传aar到Nexus">
 <meta name="twitter:description" content="最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。
 1. 发布Library到私服先展示下我建立的Project的目录结果">
 <meta name="twitter:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170421/155857574.png">
     
-        <link rel="alternative" href="/atom.xml" title="JasonZhang&#39;s Blog" type="application/atom+xml">
+        <link rel="alternate" type="application/atom+xml" title="JasonZhang&#39;s Blog" href="/atom.xml">
     
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/style.css?v=1.4.9">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
 </head>
 
@@ -55,7 +55,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap">
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpg">
@@ -79,21 +79,21 @@
             <li class="waves-block waves-effect">
               <a href="/archives"  >
                 <i class="icon icon-lg icon-archives"></i>
-                Archives
+                全部文章
               </a>
             </li>
         
             <li class="waves-block waves-effect">
               <a href="/tags"  >
                 <i class="icon icon-lg icon-tags"></i>
-                Tags
+                标签
               </a>
             </li>
         
             <li class="waves-block waves-effect">
               <a href="/categories"  >
                 <i class="icon icon-lg icon-th-list"></i>
-                Categories
+                分类
               </a>
             </li>
         
@@ -107,7 +107,7 @@
             <li class="waves-block waves-effect">
               <a href="http://weibo.com/zhjfweibo" target="_blank" >
                 <i class="icon icon-lg icon-weibo"></i>
-                Weibo
+                微博
               </a>
             </li>
         
@@ -160,6 +160,7 @@
 
     
 
+
 </header>
 
 
@@ -178,7 +179,7 @@
     <div class="post-card">
         <h1 class="post-card-title">AndroidStudio上传aar到Nexus</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017年04月21日 15:51" datetime="2017-04-21T07:51:16.836Z"  itemprop="datePublished">2017-04-21</time>
+            <time class="post-time" title="2017-04-21 15:51:16" datetime="2017-04-21T07:51:16.836Z"  itemprop="datePublished">2017-04-21</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
@@ -249,11 +250,11 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2017-04-21T08:20:45.285Z" itemprop="dateUpdated">2017年4月21日 16:20</time>
+    最后更新时间：<time datetime="2017-04-27T07:31:47.639Z" itemprop="dateUpdated">2017-04-27 15:31:47</time>
 </span><br>
 
 
-        转载请注明出处！
+        
     </div>
     <footer>
         <a href="http://jasonzhang1986.github.io">
@@ -272,6 +273,8 @@
 
         <div class="post-footer">
             
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nexus/">Nexus</a></li></ul>
+
 
             
 <div class="page-share-wrap">
@@ -290,7 +293,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -349,10 +352,13 @@
 lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
 
 var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
-lazyScripts.push('/js/embed.min.js?v=1.4.9');
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@latest/js/embed.min.js');
 
 
 </script>
+
+
+
 
 
 
@@ -404,14 +410,16 @@ lazyScripts.push('/js/embed.min.js?v=1.4.9');
 
 
         <p>
-            <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            <span>博客内容遵循 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0协议</a></span>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
         </p>
     </div>
     <div class="bottom">
         <p>
             <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
-            <span>JasonZhang's Blog &copy; 2015 - 2017</span>
+            <span>Jason Zhang &copy; 2016 - 2017</span>
         </p>
     </div>
 </footer>
@@ -435,7 +443,7 @@ lazyScripts.push('/js/embed.min.js?v=1.4.9');
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/21/NexusUpload/&title=《AndroidStudio上传aar到Nexus》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -475,7 +483,7 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 </script>
 
-<script src="/js/main.min.js?v=1.4.9"></script>
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
 
 
 <div class="search-panel" id="search-panel">
@@ -495,7 +503,7 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 </li>
 </template>
 
-<script src="/js/search.min.js?v=1.4.9" async></script>
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
 
 
 
@@ -503,6 +511,26 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
 
 
 </body>
