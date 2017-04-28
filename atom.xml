@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-04-27T07:31:47.639Z</updated>
+  <updated>2017-04-28T02:32:55.451Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -14,6 +14,64 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hexo接入网易云评论</title>
+    <link href="http://jasonzhang1986.github.io/2017/04/28/hexo-comment-neteast/"/>
+    <id>http://jasonzhang1986.github.io/2017/04/28/hexo-comment-neteast/</id>
+    <published>2017-04-28T02:02:14.000Z</published>
+    <updated>2017-04-28T02:32:55.451Z</updated>
+    
+    <content type="html"><![CDATA[<p>搞了GitPage之后不久看到多说评论6月份要关闭的消息，一直在琢磨换哪家，大家都有不同的观点，我还是觉得网易的云跟帖值得拥有，毕竟是大厂并且是易友好多年。</p>
+<p>不多说，说干就干。我使用的是Hexo的插件<a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank" rel="external">indigo</a>。</p>
+<h2 id="注册网易云跟帖"><a href="#注册网易云跟帖" class="headerlink" title="注册网易云跟帖"></a>注册<a href="https://gentie.163.com/index.html" target="_blank" rel="external">网易云跟帖</a></h2><h3 id="填写站点的基本信息"><a href="#填写站点的基本信息" class="headerlink" title="填写站点的基本信息"></a>填写站点的基本信息</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170428/101019787.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<h3 id="填写站长信息"><a href="#填写站长信息" class="headerlink" title="填写站长信息"></a>填写站长信息</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170428/101200129.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<h3 id="获取代码"><a href="#获取代码" class="headerlink" title="获取代码"></a>获取代码</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170428/101516562.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>代码留作稍后使用</p>
+<h2 id="插件配置"><a href="#插件配置" class="headerlink" title="插件配置"></a>插件配置</h2><p>在themes/indigo/layout/_partial/plugins/下创建neteast.ejs文件，仿照原有的duoshuo.ejs将刚刚复制的云跟帖代码加入到如下代码中间<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;% <span class="keyword">if</span> (theme.netease)&#123; %&gt;</div><div class="line"></div><div class="line">    ......</div><div class="line"></div><div class="line">&lt;% &#125; %&gt;</div></pre></td></tr></table></figure></p>
+<p>最后的neteast.ejs内容如下（<font color="red">其中的productKey的Tie.loader内容请替换为自己申请的</font>）：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;% <span class="keyword">if</span> (theme.netease)&#123; %&gt;</div><div class="line">	&lt;div id="cloud-tie-wrapper" class="cloud-tie-wrapper"&gt;&lt;/div&gt;</div><div class="line">	&lt;script src=<span class="string">"https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"</span>&gt;&lt;/script&gt;</div><div class="line">	&lt;script&gt;</div><div class="line">	<span class="keyword">var</span> cloudTieConfig = &#123;</div><div class="line">	  <span class="attr">url</span>: <span class="built_in">document</span>.location.href,</div><div class="line">	  <span class="attr">sourceId</span>: <span class="string">""</span>,</div><div class="line">	  <span class="attr">productKey</span>: <span class="string">"**********************"</span>,</div><div class="line">	  <span class="attr">target</span>: <span class="string">"cloud-tie-wrapper"</span></div><div class="line">	&#125;;</div><div class="line">	<span class="keyword">var</span> yunManualLoad = <span class="literal">true</span>;</div><div class="line">	Tie.loader(<span class="string">"*********************"</span>, <span class="literal">true</span>);</div><div class="line">	&lt;/script&gt;</div><div class="line">&lt;% &#125; %&gt;</div></pre></td></tr></table></figure></p>
+<p>在comment的配置文件themes/indigo/layout/_partial/post/comment.ejs中添加刚刚加入的评论配置文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;%- partial(<span class="string">'../plugins/netease'</span>) %&gt;</div></pre></td></tr></table></figure></p>
+<p>最后，在主题的config文件(themes/indigo/_config.yml)中关闭duoshuo，打开neteast<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">duoshuo: <span class="literal">false</span></div><div class="line"></div><div class="line">netease: <span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<p>当然，不能忘记了编译下，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo g -d</div></pre></td></tr></table></figure></p>
+<font color="red">注意：部署到web端才能看到网易云评论，在localhost测试的时候一直不行，以为以为配置错误呢，尴尬…</font>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://github.com/Clarence-pan/hexo-blog/commit/a6a85f89e17900d023c8c67020465830532f75bb" target="_blank" rel="external">多说要关闭了，修改为使用搜狐畅言评论插件</a></p>
+<p><a href="http://winxo.cn/20170409/displace_duoshuo.html" target="_blank" rel="external">替换多说到网易云跟帖</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;搞了GitPage之后不久看到多说评论6月份要关闭的消息，一直在琢磨换哪家，大家都有不同的观点，我还是觉得网易的云跟帖值得拥有，毕竟是大厂并且是易友好多年。&lt;/p&gt;
+&lt;p&gt;不多说，说干就干。我使用的是Hexo的插件&lt;a href=&quot;https://github.com/ys
+    
+    </summary>
+    
+      <category term="笔记" scheme="http://jasonzhang1986.github.io/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="Hexo" scheme="http://jasonzhang1986.github.io/tags/Hexo/"/>
+    
+      <category term="网易云评论" scheme="http://jasonzhang1986.github.io/tags/%E7%BD%91%E6%98%93%E4%BA%91%E8%AF%84%E8%AE%BA/"/>
+    
+  </entry>
   
   <entry>
     <title>AndroidStudio上传aar到Nexus</title>
