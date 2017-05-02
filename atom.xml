@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-04-28T02:32:55.451Z</updated>
+  <updated>2017-05-02T07:40:01.720Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -16,11 +16,61 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Android通信机制分析-Binder</title>
+    <link href="http://jasonzhang1986.github.io/2017/04/29/binder/"/>
+    <id>http://jasonzhang1986.github.io/2017/04/29/binder/</id>
+    <published>2017-04-29T01:31:13.000Z</published>
+    <updated>2017-05-02T07:40:01.720Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android四大组件分别是<strong>Activity</strong>、<strong>Service</strong>、<strong>BroadcastReceiver</strong>、<strong>ContentProvider</strong>，我们平时开发的App都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于Binder的IPC机制。</p>
+<p>我们平时开发过程中用到很多跨进程的通信，比如：</p>
+<ol>
+<li><p>App中的ActivityA调用系统的ActivityB</p>
+</li>
+<li><p>App中的ActivityA调用另一个App的Service</p>
+</li>
+</ol>
+<p>Binder作为Android系统提供的一种的IPC机制，整个Android系统架构中大量采用了Binder机制的IPC方案。</p>
+<h2 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h2><p>说到IPC，我们来稍微看一下IPC机制的原理：<strong>进程间通信（IPC, Inter-Process Communication）</strong> 指至少两个进程或线程减传送数据或者信号的技术或方法。每个进程都有自己的一部分独立的系统资源，彼此之间是隔离的。为了能使不同的进程相互访问资源并进行协调工作，才有了进程间通信。IPC的方法有多种，包括<strong>文件、Socket、管道、信号量、共享内存</strong> 等，我们今天主要来说说Android中的Binder。</p>
+<h2 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>每个Android在各自独立的Dalvik虚拟机中运行，每个进程拥有独立的地址空间和资源，对应的地址空间有一部分是用户空间，另一部分是内核空间。对于用户空间，不同进程之间彼此是不能共享的，而内核空间则是可以共享的，Client进程同Server进程通信，就是利用进程间可共享的内核空间(<em>内核驱动</em>)来完成底层通信工作的。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134208172.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>Android中Binder通信采用的是C/S架构，Binder框架包括Client、Server、ServiceManager以及Binder驱动，其中ServiceManager用来管理系统中各种服务。其中Server，Client，ServiceManager运行于用户空间，Binder驱动运行于内核空间。这四个角色的关系和互联网类似：Server是服务器，Client是客户终端，ServiceManager是域名服务器（DNS），Binder驱动是路由器。如图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134549061.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<h3 id="Binder实现"><a href="#Binder实现" class="headerlink" title="Binder实现"></a>Binder实现</h3>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;Android四大组件分别是&lt;strong&gt;Activity&lt;/strong&gt;、&lt;strong&gt;Service&lt;/strong&gt;、&lt;stro
+    
+    </summary>
+    
+      <category term="Android" scheme="http://jasonzhang1986.github.io/categories/Android/"/>
+    
+    
+      <category term="Android" scheme="http://jasonzhang1986.github.io/tags/Android/"/>
+    
+      <category term="Binder" scheme="http://jasonzhang1986.github.io/tags/Binder/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hexo接入网易云评论</title>
     <link href="http://jasonzhang1986.github.io/2017/04/28/hexo-comment-neteast/"/>
     <id>http://jasonzhang1986.github.io/2017/04/28/hexo-comment-neteast/</id>
     <published>2017-04-28T02:02:14.000Z</published>
-    <updated>2017-04-28T02:32:55.451Z</updated>
+    <updated>2017-04-28T02:54:31.520Z</updated>
     
     <content type="html"><![CDATA[<p>搞了GitPage之后不久看到多说评论6月份要关闭的消息，一直在琢磨换哪家，大家都有不同的观点，我还是觉得网易的云跟帖值得拥有，毕竟是大厂并且是易友好多年。</p>
 <p>不多说，说干就干。我使用的是Hexo的插件<a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank" rel="external">indigo</a>。</p>
@@ -78,7 +128,7 @@
     <link href="http://jasonzhang1986.github.io/2017/04/21/NexusUpload/"/>
     <id>http://jasonzhang1986.github.io/2017/04/21/NexusUpload/</id>
     <published>2017-04-21T07:51:16.836Z</published>
-    <updated>2017-04-27T07:31:47.639Z</updated>
+    <updated>2017-05-02T10:24:23.558Z</updated>
     
     <content type="html"><![CDATA[<p>最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。</p>
 <h2 id="1-发布Library到私服"><a href="#1-发布Library到私服" class="headerlink" title="1. 发布Library到私服"></a>1. 发布Library到私服</h2><p>先展示下我建立的Project的目录结果</p>
@@ -91,9 +141,9 @@
             </figure>
 <p>app目录大家最熟悉了，是AS默认的主module的名字，utils目录就是我新建立的library module。</p>
 <p>接下来我们来配置maven的上传</p>
-<h3 id="配置pom参数"><a href="#配置pom参数" class="headerlink" title="配置pom参数"></a>配置pom参数</h3><p>项目根目录下的gradle.property中添加如下pom参数<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">POM_NAME=utils</div><div class="line">POM_VERSION=<span class="number">1.0</span><span class="number">.1</span></div><div class="line">POM_ARTIFACTID=utils</div><div class="line">POM_GROUPID=com.leplay.android</div><div class="line">POM_PACKAGING=aar</div><div class="line">POM_DESCRIPTION=utils <span class="keyword">for</span> Android</div></pre></td></tr></table></figure></p>
-<h3 id="配置Nexus参数"><a href="#配置Nexus参数" class="headerlink" title="配置Nexus参数"></a>配置Nexus参数</h3><p>因为Nexus相关参数是固定的，包含仓库地址、用户名和密码，我们把这些参数写到gradle的Global配置中，目录是<strong>C:\Users\(用户名)\.gradle\gradle.property</strong><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NEXUS_USERNAME=username</div><div class="line">NEXUS_PASSWORD=password</div><div class="line">NEXUS_REPOSITORY_URL=<span class="string">http:</span><span class="comment">//xxx/nexus/content/repositories/xxx/</span></div></pre></td></tr></table></figure></p>
-<h3 id="引入upload脚本"><a href="#引入upload脚本" class="headerlink" title="引入upload脚本"></a>引入upload脚本</h3><p>在library的build.gradle文件末尾加上如下引用：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">from:</span> <span class="string">'http://jasonzhang1986.github.io/nexus_upload.gradle'</span></div></pre></td></tr></table></figure></p>
+<h3 id="配置pom参数"><a href="#配置pom参数" class="headerlink" title="配置pom参数"></a>配置pom参数</h3><p>项目根目录下的gradle.properties中添加如下pom参数<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">POM_NAME=utils</div><div class="line">POM_VERSION=<span class="number">1.0</span><span class="number">.1</span></div><div class="line">POM_ARTIFACTID=utils</div><div class="line">POM_GROUPID=com.leplay.android</div><div class="line">POM_PACKAGING=aar</div><div class="line">POM_DESCRIPTION=utils <span class="keyword">for</span> Android</div></pre></td></tr></table></figure></p>
+<h3 id="配置Nexus参数"><a href="#配置Nexus参数" class="headerlink" title="配置Nexus参数"></a>配置Nexus参数</h3><p>因为Nexus相关参数是固定的，包含仓库地址、用户名和密码，我们把这些参数写到gradle的Global配置中，目录是<strong>C:\Users\(用户名)\.gradle\gradle.properties</strong><br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NEXUS_USERNAME=username</div><div class="line">NEXUS_PASSWORD=password</div><div class="line">NEXUS_REPOSITORY_URL=<span class="string">http:</span><span class="comment">//xxx/nexus/content/repositories/xxx/</span></div></pre></td></tr></table></figure></p>
+<h3 id="引入upload脚本"><a href="#引入upload脚本" class="headerlink" title="引入upload脚本"></a>引入upload脚本</h3><p>在library的build.gradle文件末尾加上如下引用：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">from:</span> <span class="string">'http://jifengzhang.me/nexus_upload.gradle'</span></div></pre></td></tr></table></figure></p>
 <p>这个nexus_upload.gradle脚本是参考大神的脚本修改，包含生成java-source和java-doc，具体实现细节可以进入看脚本代码。</p>
 <h3 id="uploadArchives"><a href="#uploadArchives" class="headerlink" title="uploadArchives"></a>uploadArchives</h3><p>编译并上传library，双击右侧gradle task中的uploadArchives</p>
 <figure class="image-bubble">

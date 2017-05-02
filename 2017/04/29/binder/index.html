@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Android通信机制分析-Binder | JasonZhang&#39;s Blog | 码农Jason的心得</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,Binder">
+    <meta name="description" content="概述Android四大组件分别是Activity、Service、BroadcastReceiver、ContentProvider，我们平时开发的App都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于Binder的IPC机制。
+我们平时开发过程中用到很多跨进程的通信，比如：
+
+App中的ActivityA调用系统的ActivityB
+
+App中的Activi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android通信机制分析-Binder">
+<meta property="og:url" content="http://jasonzhang1986.github.io/2017/04/29/binder/index.html">
+<meta property="og:site_name" content="JasonZhang's Blog">
+<meta property="og:description" content="概述Android四大组件分别是Activity、Service、BroadcastReceiver、ContentProvider，我们平时开发的App都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于Binder的IPC机制。
+我们平时开发过程中用到很多跨进程的通信，比如：
+
+App中的ActivityA调用系统的ActivityB
+
+App中的Activi">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134208172.png">
+<meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134549061.png">
+<meta property="og:updated_time" content="2017-05-02T07:40:01.720Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android通信机制分析-Binder">
+<meta name="twitter:description" content="概述Android四大组件分别是Activity、Service、BroadcastReceiver、ContentProvider，我们平时开发的App都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于Binder的IPC机制。
+我们平时开发过程中用到很多跨进程的通信，比如：
+
+App中的ActivityA调用系统的ActivityB
+
+App中的Activi">
+<meta name="twitter:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134208172.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="JasonZhang&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Jason Zhang</h5>
+          <a href="mailto:jifengzhang.barlow@gmail.com" title="jifengzhang.barlow@gmail.com" class="mail">jifengzhang.barlow@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                全部文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/jasonzhang1986" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/zhjfweibo" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                微博
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Android通信机制分析-Binder</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Android通信机制分析-Binder</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-29T01:31:13.000Z" itemprop="datePublished" class="page-time">
+  2017-04-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#IPC"><span class="post-toc-number">2.</span> <span class="post-toc-text">IPC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binder"><span class="post-toc-number">3.</span> <span class="post-toc-text">Binder</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#概念"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">概念</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Binder实现"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Binder实现</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-binder"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Android通信机制分析-Binder</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-29 09:31:13" datetime="2017-04-29T01:31:13.000Z"  itemprop="datePublished">2017-04-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android四大组件分别是<strong>Activity</strong>、<strong>Service</strong>、<strong>BroadcastReceiver</strong>、<strong>ContentProvider</strong>，我们平时开发的App都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于Binder的IPC机制。</p>
+<p>我们平时开发过程中用到很多跨进程的通信，比如：</p>
+<ol>
+<li><p>App中的ActivityA调用系统的ActivityB</p>
+</li>
+<li><p>App中的ActivityA调用另一个App的Service</p>
+</li>
+</ol>
+<p>Binder作为Android系统提供的一种的IPC机制，整个Android系统架构中大量采用了Binder机制的IPC方案。</p>
+<h2 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h2><p>说到IPC，我们来稍微看一下IPC机制的原理：<strong>进程间通信（IPC, Inter-Process Communication）</strong> 指至少两个进程或线程减传送数据或者信号的技术或方法。每个进程都有自己的一部分独立的系统资源，彼此之间是隔离的。为了能使不同的进程相互访问资源并进行协调工作，才有了进程间通信。IPC的方法有多种，包括<strong>文件、Socket、管道、信号量、共享内存</strong> 等，我们今天主要来说说Android中的Binder。</p>
+<h2 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>每个Android在各自独立的Dalvik虚拟机中运行，每个进程拥有独立的地址空间和资源，对应的地址空间有一部分是用户空间，另一部分是内核空间。对于用户空间，不同进程之间彼此是不能共享的，而内核空间则是可以共享的，Client进程同Server进程通信，就是利用进程间可共享的内核空间(<em>内核驱动</em>)来完成底层通信工作的。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134208172.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<p>Android中Binder通信采用的是C/S架构，Binder框架包括Client、Server、ServiceManager以及Binder驱动，其中ServiceManager用来管理系统中各种服务。其中Server，Client，ServiceManager运行于用户空间，Binder驱动运行于内核空间。这四个角色的关系和互联网类似：Server是服务器，Client是客户终端，ServiceManager是域名服务器（DNS），Binder驱动是路由器。如图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134549061.png" alt="mark" title="">
+                </div>
+                <div class="image-caption">mark</div>
+            </figure>
+<h3 id="Binder实现"><a href="#Binder实现" class="headerlink" title="Binder实现"></a>Binder实现</h3>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-05-02T07:40:01.720Z" itemprop="dateUpdated">2017-05-02 15:40:01</time>
+</span><br>
+
+
+        
+    </div>
+    <footer>
+        <a href="http://jasonzhang1986.github.io">
+            <img src="/img/avatar.jpg" alt="Jason Zhang">
+            Jason Zhang
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binder/">Binder</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://jasonzhang1986.github.io/2017/04/29/binder/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android通信机制分析-Binder》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/29/binder/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://jasonzhang1986.github.io/2017/04/29/binder/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/28/hexo-comment-neteast/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hexo接入网易云评论</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+  
+
+	<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+	<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+	<script>
+	var cloudTieConfig = {
+	  url: document.location.href, 
+	  sourceId: "",
+	  productKey: "259e53cea58c4ed4808f8d01c78515d3",
+	  target: "cloud-tie-wrapper"
+	};
+	var yunManualLoad = true;
+	Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+	</script>
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢支持~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>Jason Zhang &copy; 2016 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://jasonzhang1986.github.io/2017/04/29/binder/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android通信机制分析-Binder》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/29/binder/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://jasonzhang1986.github.io/2017/04/29/binder/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aQXKEMAwEQP7/aXLlEJyRDJXCbk5bWxvj5jARko8jvs7Ldf3m7vP1m/Fq1b+dujAwMD7LOIdX8pu7G49XyB9QdEcMDIwNGMkmxp+fyv7x+rffY2BgYMSlXjVqMTAwMN4L3LtgzeO4WiZiYGBgJDfIe1xJKP/buzgGBsYHGTMvlm9/fmW+gYGB8SnGWbzyl9hxmPbKx9tdYWBgLM3IA65XnM2MKquHPzAwMHZg5Ie0ehE5/n0e0IUnjYGBsQSjOqTsNel648w8oDEwMHZgzIwqE0A+cqiOGY75qhMDA+MjjOqmq6+p+Wq9x4eBgbE2Y1yW9Vr5vW3NsDEwMNZm9Ppz+Utpcpyi2p77ZScYGBhbMvLbPDujaB7awMDA2IDRK/WeOv6VF6zRMQsMDIxFGU9tKGno52ViDsbAwFib0dtKAsvLvurg4Y/VMDAwlmP04rXa+q8e9ipHLQYGxjaMals/OebVa8DlI08MDIwdGONt5QtVAzQP6MK/AQwMjA0YeS9rJiKrIV4YHmBgYGzGyA9e5GOGXqMtj3IMDIwdGOWAK7bnpgaTyW4xMDAWZZzFq1fS5SskcX9bFGJgYCzK6MVc0tyfH4g2z4xgYGAsypgJ2WQTvSZa+RFgYGBswKgGXzIA6JV9veEEBgYGRtJoe7Yl16xeMTAwMFoDyGrpWS03MTAw9mHkzf1emZhnY7X0xMDA2IFRrbvy5v78qHJ+zICBgfFxxg/BTRkGeoEEagAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
