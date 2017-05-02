@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-05-02T07:40:01.720Z</updated>
+  <updated>2017-05-02T10:28:13.344Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://jasonzhang1986.github.io/2017/04/29/binder/"/>
     <id>http://jasonzhang1986.github.io/2017/04/29/binder/</id>
     <published>2017-04-29T01:31:13.000Z</published>
-    <updated>2017-05-02T07:40:01.720Z</updated>
+    <updated>2017-05-02T10:28:13.344Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Android四大组件分别是<strong>Activity</strong>、<strong>Service</strong>、<strong>BroadcastReceiver</strong>、<strong>ContentProvider</strong>，我们平时开发的App都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于Binder的IPC机制。</p>
 <p>我们平时开发过程中用到很多跨进程的通信，比如：</p>
@@ -128,7 +128,7 @@
     <link href="http://jasonzhang1986.github.io/2017/04/21/NexusUpload/"/>
     <id>http://jasonzhang1986.github.io/2017/04/21/NexusUpload/</id>
     <published>2017-04-21T07:51:16.836Z</published>
-    <updated>2017-05-02T10:24:23.558Z</updated>
+    <updated>2017-05-02T10:28:17.717Z</updated>
     
     <content type="html"><![CDATA[<p>最近因为公司项目需要，多个组开发的项目依赖于一些公共的Library，正好公司也有Nexus仓库，于是就学习下如何如何将自己的Library上传到Nexus仓库供大家使用。</p>
 <h2 id="1-发布Library到私服"><a href="#1-发布Library到私服" class="headerlink" title="1. 发布Library到私服"></a>1. 发布Library到私服</h2><p>先展示下我建立的Project的目录结果</p>
