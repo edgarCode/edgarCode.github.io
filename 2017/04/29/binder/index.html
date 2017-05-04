@@ -13,7 +13,7 @@
     
     
     
-    <title>Android通信机制分析-Binder | JasonZhang&#39;s Blog | 码农Jason的心得</title>
+    <title>Android通信机制分析-Binder(1) | JasonZhang&#39;s Blog | 码农Jason的心得</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -25,7 +25,7 @@
 
 App 中的 ActivityA 调用系统的 ActivityB">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android通信机制分析-Binder">
+<meta property="og:title" content="Android通信机制分析-Binder(1)">
 <meta property="og:url" content="http://jasonzhang1986.github.io/2017/04/29/binder/index.html">
 <meta property="og:site_name" content="JasonZhang's Blog">
 <meta property="og:description" content="概述Android四大组件分别是 Activity、Service、BroadcastReceiver、ContentProvider，我们平时开发的 App 都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于 Binder 的 IPC 机制。
@@ -38,9 +38,9 @@ App 中的 ActivityA 调用系统的 ActivityB">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/153750191.png">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/161218200.png">
 <meta property="og:image" content="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/182015065.png">
-<meta property="og:updated_time" content="2017-05-04T02:16:27.745Z">
+<meta property="og:updated_time" content="2017-05-04T02:21:36.430Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android通信机制分析-Binder">
+<meta name="twitter:title" content="Android通信机制分析-Binder(1)">
 <meta name="twitter:description" content="概述Android四大组件分别是 Activity、Service、BroadcastReceiver、ContentProvider，我们平时开发的 App 都是由四大组件中的一个或者多个组合而成；这四大组件所涉及的多进程间通信底层实现都是基于 Binder 的 IPC 机制。
 我们平时开发过程中用到很多跨进程的通信，比如：
 
@@ -129,7 +129,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Android通信机制分析-Binder</div>
+        <div class="flex-col header-title ellipsis">Android通信机制分析-Binder(1)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -151,7 +151,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">Android通信机制分析-Binder</h1>
+        <h1 class="title">Android通信机制分析-Binder(1)</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-04-29T01:31:13.000Z" itemprop="datePublished" class="page-time">
@@ -184,7 +184,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">Android通信机制分析-Binder</h1>
+        <h1 class="post-card-title">Android通信机制分析-Binder(1)</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-04-29 09:31:13" datetime="2017-04-29T01:31:13.000Z"  itemprop="datePublished">2017-04-29</time>
 
@@ -217,39 +217,39 @@ App 中的 ActivityA 调用系统的 ActivityB">
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134208172.png" alt="mark" title="">
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134208172.png" alt="IPC 机制" title="">
                 </div>
-                <div class="image-caption">mark</div>
+                <div class="image-caption">IPC 机制</div>
             </figure>
 <p>Android 中 Binder 通信采用的是 C/S 架构，Binder 框架包括 Client、Server、ServiceManager 以及 Binder 驱动，其中 ServiceManager 用来管理系统中各种服务。其中 Server，Client，ServiceManager 运行于用户空间，Binder 驱动运行于内核空间。这四个角色的关系和互联网类似：Server 是服务器，Client 是客户终端，ServiceManager 是域名服务器（DNS），Binder 驱动是路由器。如图：</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134549061.png" alt="mark" title="">
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170502/134549061.png" alt="Binder" title="">
                 </div>
-                <div class="image-caption">mark</div>
+                <div class="image-caption">Binder</div>
             </figure>
 <h3 id="Binder使用实例"><a href="#Binder使用实例" class="headerlink" title="Binder使用实例"></a>Binder使用实例</h3><p>Binder 是 Android 中一个类，它实现 IBinder 接口，从 IPC 方面来看 Binder 是一种跨进程通信的方式，从 Framework 方面来看 Binder 是 ServiceManager 连接各种 Manager (WindowManager, ActivityManager 等等)和相应的 ManagerService (WindowManagerService, ActivityManagerService 等等)的桥梁；<br><figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170504/093603769.png" alt="mark" title="">
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170504/093603769.png" alt="AMS 架构" title="">
                 </div>
-                <div class="image-caption">mark</div>
+                <div class="image-caption">AMS 架构</div>
             </figure><br>对客户端应用来说，Binder 是客户端和服务端通信的媒介，当bindService的时候，服务端会返回一个包含服务端业务调用的 Binder 对象，通过这个 Binder 对象客户端可以获取服务端提供的服务、数据等。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocalService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</div><div class="line">    <span class="comment">// Binder given to clients</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> IBinder mBinder = <span class="keyword">new</span> LocalBinder();</div><div class="line">    <span class="comment">// Random number generator</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Random mGenerator = <span class="keyword">new</span> Random();</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Class used for the client Binder.  Because we know this service always</div><div class="line">     * runs in the same process as its clients, we don't need to deal with IPC.</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocalBinder</span> <span class="keyword">extends</span> <span class="title">Binder</span> </span>&#123;</div><div class="line">        <span class="function">LocalService <span class="title">getService</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="comment">// Return this instance of LocalService so clients can call public methods</span></div><div class="line">            <span class="keyword">return</span> LocalService.<span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> mBinder; <span class="comment">//通过 onBind 返回一个服务端的 Binder 对象</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/** method for clients */</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getRandomNumber</span><span class="params">()</span> </span>&#123;</div><div class="line">      <span class="keyword">return</span> mGenerator.nextInt(<span class="number">100</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>上面这段代码是 Service 的一种实现方式，这里的 Binder 不涉及跨进程通信，所以比较简单，跨进程的 Binder 使用在 Android 中主要是 Messager 和 AIDL，Messager 的底层实现也是 AIDL，所以我们先来聊聊 AIDL。</p>
 <h3 id="AIDL"><a href="#AIDL" class="headerlink" title="AIDL"></a>AIDL</h3><p>新建一个 AIDL 的文件<br><br><figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/153750191.png" alt="mark" title="">
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/153750191.png" alt="新建 AIDL File" title="">
                 </div>
-                <div class="image-caption">mark</div>
+                <div class="image-caption">新建 AIDL File</div>
             </figure></p>
 <p>新建后会自动生成 aidl 的目录，并将新建的 AIDL 文件放到该目录下<br><br><figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/161218200.png" alt="mark" title="">
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/161218200.png" alt="生成的aidl目录" title="">
                 </div>
-                <div class="image-caption">mark</div>
+                <div class="image-caption">生成的aidl目录</div>
             </figure></p>
 <p>Book.aidl 文件内容是自动生成的，我们可以根据自己的需求进行修改, 自动生成的代码标记了 import 语句的地方和可以用做 AIDL 参数和返回值的一些基本类型<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Book.aidl</span></div><div class="line"><span class="keyword">package</span> me.jifengzhang.aidldemo;</div><div class="line"></div><div class="line"><span class="comment">// Declare any non-default types here with import statements</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Book</span> </span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * Demonstrates some basic types that you can use as parameters</div><div class="line">     * and return values in AIDL.</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">basicTypes</span><span class="params">(<span class="keyword">int</span> anInt, <span class="keyword">long</span> aLong, <span class="keyword">boolean</span> aBoolean, <span class="keyword">float</span> aFloat,</span></span></div><div class="line">            <span class="keyword">double</span> aDouble, String aString);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>这个demo主要是提供 Book 的两个操作，我们新建的文件包括 Book.java 、 IBook.aidl 、 IBookManager.aidl，其中 Book 对象需要跨进程通过Binder传输，所以需要实现 Parcelable 接口。</p>
@@ -274,9 +274,9 @@ App 中的 ActivityA 调用系统的 ActivityB">
 <p>通过简单的分析描述，其实 AIDL 的实现其实很简单，方法调用的流程大概如下：<br><figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
-                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/182015065.png" alt="mark" title="">
+                    <img src="http://7u2jwu.com1.z0.glb.clouddn.com/blog/20170503/182015065.png" alt="AIDL 流程" title="">
                 </div>
-                <div class="image-caption">mark</div>
+                <div class="image-caption">AIDL 流程</div>
             </figure></p>
 <h3 id="服务端（Service）实现"><a href="#服务端（Service）实现" class="headerlink" title="服务端（Service）实现"></a>服务端（Service）实现</h3><p>上面简单说明了 AIDL 中接口的定义，这里我们来看看服务端也就是作为服务提供者的 Service 的实现，我们可以想到的是 Service 肯定是要实现 IBookManager 定义的两个接口，剩余的应该有 Service 的基本实现。那我们来看代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookManagerService</span> <span class="keyword">extends</span> <span class="title">Service</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> CopyOnWriteArrayList&lt;Book&gt; mBookList = <span class="keyword">new</span> CopyOnWriteArrayList&lt;&gt;();</div><div class="line"></div><div class="line">    <span class="keyword">private</span> Binder mBinder = <span class="keyword">new</span> IBookManager.Stub() &#123;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> List&lt;Book&gt; <span class="title">getBookList</span><span class="params">()</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">            <span class="keyword">return</span> mBookList;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">(Book book)</span> <span class="keyword">throws</span> RemoteException </span>&#123;</div><div class="line">            mBookList.add(book);</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate();</div><div class="line">        mBookList.add(<span class="keyword">new</span> Book(<span class="number">1</span>, <span class="string">"Android"</span>));</div><div class="line">        mBookList.add(<span class="keyword">new</span> Book(<span class="number">2</span>, <span class="string">"IOS"</span>));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> IBinder <span class="title">onBind</span><span class="params">(Intent intent)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> mBinder;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>果然，代码和我们想的是一样的，这里通过 new 一个 Stub (IBookManager 的内部类，继承自 Binder)来实现 getBookList 和 addBook 两个接口方法。</p>
@@ -291,7 +291,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2017-05-04T02:16:27.745Z" itemprop="dateUpdated">2017-05-04 10:16:27</time>
+    最后更新时间：<time datetime="2017-05-04T02:21:36.430Z" itemprop="dateUpdated">2017-05-04 10:21:36</time>
 </span><br>
 
 
@@ -324,7 +324,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder(1)》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -334,7 +334,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder(1)》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -344,7 +344,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android通信机制分析-Binder》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/29/binder/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android通信机制分析-Binder(1)》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/29/binder/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -476,7 +476,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder(1)》 — JasonZhang's Blog&pic=http://jasonzhang1986.github.io/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -486,7 +486,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://jasonzhang1986.github.io/2017/04/29/binder/&title=《Android通信机制分析-Binder(1)》 — JasonZhang's Blog&source=Android开发、架构师，学习新知识，了解新动态！" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -496,7 +496,7 @@ App 中的 ActivityA 调用系统的 ActivityB">
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android通信机制分析-Binder》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/29/binder/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android通信机制分析-Binder(1)》 — JasonZhang's Blog&url=http://jasonzhang1986.github.io/2017/04/29/binder/&via=http://jasonzhang1986.github.io" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
