@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-05-04T02:27:50.325Z</updated>
+  <updated>2017-08-14T02:51:06.501Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -14,6 +14,88 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android面试题集</title>
+    <link href="http://jasonzhang1986.github.io/2017/08/14/interview-questions/"/>
+    <id>http://jasonzhang1986.github.io/2017/08/14/interview-questions/</id>
+    <published>2017-08-14T02:43:37.066Z</published>
+    <updated>2017-08-14T02:51:06.501Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Android相关"><a href="#Android相关" class="headerlink" title="Android相关"></a>Android相关</h3><ul>
+<li>Activity正常和异常情况下的生命周期 <a href="http://blog.csdn.net/geekerhw/article/details/48749935" target="_blank" rel="external">Link</a></li>
+<li>Activity的四种启动模式</li>
+<li>app如何保证后台服务不被杀死</li>
+<li>Activity与Fragment生命周期有何联系</li>
+<li>Activity与Fragment之间如何进行通信？</li>
+<li>IntentService比Service好在哪</li>
+<li>如何优雅的展示Bitmap大图</li>
+<li>Retrofit使用的注解是哪种注解？以及，注解的底层实现是怎样的</li>
+<li>Thread和HandlerThread区别</li>
+<li>关于&lt; include &gt;&lt; merge &gt;&lt; stub &gt;三者的使用场景</li>
+<li>对Android消息机制的理解</li>
+<li>如何优化一个ListView?</li>
+<li>哪些情况会导致OOM？</li>
+<li>造成ANR 的原因？</li>
+<li>如何监测内存泄露？有哪些工具？</li>
+<li>用leak工具监测内存泄露的原理是什么？</li>
+<li>RxJava中map和flatmap操作符的区别及底层实现</li>
+<li>对消息机制中Looper的理解</li>
+<li>界面卡顿的原因有哪些？</li>
+<li>RecyclerView与ListView缓存机制的不同</li>
+<li>android什么情况下会发生内存泄露</li>
+</ul>
+<h3 id="Java相关"><a href="#Java相关" class="headerlink" title="Java相关"></a>Java相关</h3><ul>
+<li>Java是值传递还是引用传递</li>
+<li>final和static关键字的区别</li>
+<li>static修饰的方法可以被子类重写吗？为什么？</li>
+<li>HashMap HashSet HashTable的区别？</li>
+<li>如何让HashMap可以线程安全？</li>
+<li>序列化是什么?如何实现它?</li>
+<li>垃圾收集器是什么?它是如何工作的</li>
+<li>深拷贝和浅拷贝的区别</li>
+<li>clone()的默认实现是深拷贝还是浅拷贝?如何让clone()实现深拷贝？</li>
+<li>动态代理和静态代理</li>
+<li>JVM的内存分布及垃圾回收机制</li>
+<li>Java有哪几种创建新线程的方法及区别</li>
+<li>ThreadLocal的理解</li>
+<li>Java多线程之间如何通信</li>
+<li>线程池的实现机制</li>
+<li>Integer类对int的优化</li>
+<li>单例模式有哪些实现方式</li>
+<li>通过静态内部类实现单例模式有哪些优点</li>
+<li>synchronized volatile关键字有什么区别？以及还有哪些同样功能的关键字</li>
+<li>操作系统进程间通信有哪些方法</li>
+<li>谈谈对Socket的理解</li>
+<li>不同架构的机器有何不同（如x86等）</li>
+<li>TCP/UDP比较</li>
+<li>什么时候会发生死锁</li>
+<li>操作系统层面上，线程可以加哪些锁</li>
+<li>栈在系统中的方向是怎样的？为什么？</li>
+<li>Java 中的类型转换</li>
+<li>修饰符transient和volatile的作用是什么？</li>
+</ul>
+<h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><ul>
+<li>求二叉树第n层节点数</li>
+<li>两个有序链表合并</li>
+<li>求无序数组中的中位数</li>
+<li>二叉树深度算法</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Android相关&quot;&gt;&lt;a href=&quot;#Android相关&quot; class=&quot;headerlink&quot; title=&quot;Android相关&quot;&gt;&lt;/a&gt;Android相关&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Activity正常和异常情况下的生命周期 &lt;a href=&quot;http:
+    
+    </summary>
+    
+      <category term="Android" scheme="http://jasonzhang1986.github.io/categories/Android/"/>
+    
+    
+      <category term="Android" scheme="http://jasonzhang1986.github.io/tags/Android/"/>
+    
+  </entry>
   
   <entry>
     <title>Android通信机制分析-Binder(1)</title>
@@ -360,7 +442,7 @@
     <link href="http://jasonzhang1986.github.io/2017/03/10/Handler/"/>
     <id>http://jasonzhang1986.github.io/2017/03/10/Handler/</id>
     <published>2017-03-10T09:37:59.736Z</published>
-    <updated>2017-04-27T07:56:09.195Z</updated>
+    <updated>2017-08-14T02:47:50.005Z</updated>
     
     <content type="html"><![CDATA[<h5 id="Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"><a href="#Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。" class="headerlink" title="Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。"></a>Android平台上，主要用到的通信机制有两种：Handler和Binder，前者用于进程内部的通信，后者主要用于跨进程通信。</h5><h4 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h4><p>今天我们主要来聊一聊进程内部的消息机制<strong>Handler</strong>。</p>
 <p>从技术实现来说消息机制并不复杂，不只是Android平台,各种平台的消息机制原理基本上都是比较相似的，其中用到的主要概念有：</p>
