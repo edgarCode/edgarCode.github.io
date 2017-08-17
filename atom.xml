@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jasonzhang1986.github.io/"/>
-  <updated>2017-08-14T07:05:04.141Z</updated>
+  <updated>2017-08-17T02:06:55.709Z</updated>
   <id>http://jasonzhang1986.github.io/</id>
   
   <author>
@@ -16,11 +16,40 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>多个 git 账户共存</title>
+    <link href="http://jasonzhang1986.github.io/2017/08/17/git/"/>
+    <id>http://jasonzhang1986.github.io/2017/08/17/git/</id>
+    <published>2017-08-17T02:06:13.000Z</published>
+    <updated>2017-08-17T02:06:55.709Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Git-多账户问题困扰我很久，今天决定自己研究下。我遇到的问题是同一台电脑上公司的-git-账号和-github-账号如何共存的问题。"><a href="#Git-多账户问题困扰我很久，今天决定自己研究下。我遇到的问题是同一台电脑上公司的-git-账号和-github-账号如何共存的问题。" class="headerlink" title="Git 多账户问题困扰我很久，今天决定自己研究下。我遇到的问题是同一台电脑上公司的 git 账号和 github 账号如何共存的问题。"></a>Git 多账户问题困扰我很久，今天决定自己研究下。我遇到的问题是同一台电脑上公司的 git 账号和 github 账号如何共存的问题。</h3><h4 id="1、在User-用户名-ssh-config-文件中添加不同的-git-账号信息，config文件不存在的自己创建一个"><a href="#1、在User-用户名-ssh-config-文件中添加不同的-git-账号信息，config文件不存在的自己创建一个" class="headerlink" title="1、在User\用户名\.ssh\config 文件中添加不同的 git 账号信息，config文件不存在的自己创建一个"></a>1、在User\用户名\.ssh\config 文件中添加不同的 git 账号信息，config文件不存在的自己创建一个</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Host github.com</div><div class="line"> hostname github.com</div><div class="line"> User JifengZhang</div><div class="line"> IdentityFile C:\Users\JifengZhang\.ssh\github_rsa</div><div class="line"></div><div class="line">Host gitlab.xxx.cn</div><div class="line"> hostname gitlab.xxx.cn</div><div class="line"> User zhangjifeng</div><div class="line"> IdentityFile C:\Users\JifengZhang\.ssh\id_rsa</div></pre></td></tr></table></figure>
+<h4 id="2、去除之前设置的-global-的-config-信息"><a href="#2、去除之前设置的-global-的-config-信息" class="headerlink" title="2、去除之前设置的 global 的 config 信息"></a>2、去除之前设置的 global 的 config 信息</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config --gloabl unset user.name</div><div class="line">git config --global unset user.email</div></pre></td></tr></table></figure>
+<h4 id="3、在对应的工程目录下设置该工程自己的-git-config"><a href="#3、在对应的工程目录下设置该工程自己的-git-config" class="headerlink" title="3、在对应的工程目录下设置该工程自己的 git config"></a>3、在对应的工程目录下设置该工程自己的 git config</h4><ul>
+<li>下面是 github 项目根目录下的设置</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config user.name JifengZhang</div><div class="line">git config user.name jifengzhang.barlow@gmail.com</div></pre></td></tr></table></figure>
+<p>配置之后就可以在不同的工程目录使用不同的 git config ，可以愉快的玩耍了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Git-多账户问题困扰我很久，今天决定自己研究下。我遇到的问题是同一台电脑上公司的-git-账号和-github-账号如何共存的问题。&quot;&gt;&lt;a href=&quot;#Git-多账户问题困扰我很久，今天决定自己研究下。我遇到的问题是同一台电脑上公司的-git-账号和-git
+    
+    </summary>
+    
+      <category term="Git" scheme="http://jasonzhang1986.github.io/categories/Git/"/>
+    
+    
+      <category term="Git" scheme="http://jasonzhang1986.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android面试题集</title>
     <link href="http://jasonzhang1986.github.io/2017/08/14/interview-questions/"/>
     <id>http://jasonzhang1986.github.io/2017/08/14/interview-questions/</id>
     <published>2017-08-14T02:43:37.066Z</published>
-    <updated>2017-08-14T07:05:04.141Z</updated>
+    <updated>2017-08-14T07:10:25.081Z</updated>
     
     <content type="html"><![CDATA[<h3 id="Android相关"><a href="#Android相关" class="headerlink" title="Android相关"></a>Android相关</h3><ul>
 <li>Activity正常和异常情况下的生命周期 <a href="http://blog.csdn.net/geekerhw/article/details/48749935" target="_blank" rel="external">Link</a></li>
@@ -75,7 +104,7 @@
 <p>这也就是同步方法，那这时 synchronized 锁定的是哪个对象呢？它锁定的是调用这个同步方法对象。也就是说，当一个对象 P1 在不同的线程中执行这个同步方法时，它们之间会形成互斥，达到同步的效果。但是这个对象所属的 Class 所产生的另一对象 P2 却可以任意调用这个被加了 synchronized 关键字的方法。</p>
 <p>上边的示例代码等同于如下代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodA</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>)<span class="comment">//(1) &#123;</span></div><div class="line"></div><div class="line">       <span class="comment">//…..</span></div><div class="line"></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>(1)处的 this 指的是什么呢？它指的就是调用这个方法的对象，如 P1。可见同步方法实质是将 synchronized 作用于 object reference（那个拿到了P1对象锁的线程），才可以调用 P1 的同步方法，而对 P2 而言，P1 这个锁与它毫不相干，程序也可能在这种情形下摆脱同步机制的控制，造成数据混乱。</p>
+<p>(1)处的 this 指的是什么呢？它指的就是调用这个方法的对象，如 P1。可见同步方法实质是将 synchronized 作用于 object reference（那个拿到了 P1 对象锁的线程），才可以调用 P1 的同步方法，而对 P2 而言，P1 这个锁与它毫不相干，程序也可能在这种情形下摆脱同步机制的控制，造成数据混乱。</p>
 </li>
 </ul>
 </li>

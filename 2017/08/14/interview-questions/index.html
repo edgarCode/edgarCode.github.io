@@ -42,7 +42,7 @@ Activity与Fragment之间如何进行通信？Link
 IntentService比Service好在哪 Link
 如何优雅的展示Bitmap大图 Link
 Retrofit">
-<meta property="og:updated_time" content="2017-08-14T07:05:04.141Z">
+<meta property="og:updated_time" content="2017-08-14T07:10:25.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android面试题集">
 <meta name="twitter:description" content="Android相关
@@ -264,7 +264,7 @@ Retrofit">
 <p>这也就是同步方法，那这时 synchronized 锁定的是哪个对象呢？它锁定的是调用这个同步方法对象。也就是说，当一个对象 P1 在不同的线程中执行这个同步方法时，它们之间会形成互斥，达到同步的效果。但是这个对象所属的 Class 所产生的另一对象 P2 却可以任意调用这个被加了 synchronized 关键字的方法。</p>
 <p>上边的示例代码等同于如下代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodA</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>)<span class="comment">//(1) &#123;</span></div><div class="line"></div><div class="line">       <span class="comment">//…..</span></div><div class="line"></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>(1)处的 this 指的是什么呢？它指的就是调用这个方法的对象，如 P1。可见同步方法实质是将 synchronized 作用于 object reference（那个拿到了P1对象锁的线程），才可以调用 P1 的同步方法，而对 P2 而言，P1 这个锁与它毫不相干，程序也可能在这种情形下摆脱同步机制的控制，造成数据混乱。</p>
+<p>(1)处的 this 指的是什么呢？它指的就是调用这个方法的对象，如 P1。可见同步方法实质是将 synchronized 作用于 object reference（那个拿到了 P1 对象锁的线程），才可以调用 P1 的同步方法，而对 P2 而言，P1 这个锁与它毫不相干，程序也可能在这种情形下摆脱同步机制的控制，造成数据混乱。</p>
 </li>
 </ul>
 </li>
@@ -292,7 +292,7 @@ Retrofit">
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2017-08-14T07:05:04.141Z" itemprop="dateUpdated">2017-08-14 15:05:04</time>
+    最后更新时间：<time datetime="2017-08-14T07:10:25.081Z" itemprop="dateUpdated">2017-08-14 15:10:25</time>
 </span><br>
 
 
@@ -370,7 +370,14 @@ Retrofit">
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/08/17/git/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">多个 git 账户共存</h4>
+      </a>
+    </div>
   
 
   
